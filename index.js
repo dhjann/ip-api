@@ -1,46 +1,89 @@
 const express = require('express');
-const maxmind = require('maxmind');
+const axios = require('axios');
+const xmlJs = require('xml-js');
+const { parse } = require('json2csv');
 const app = express();
 const port = process.env.PORT || 3000;
 
-let lookup;
-maxmind.open('./GeoLite2-City.mmdb').then((cityLookup) => {
-  lookup = cityLookup;
-  console.log('GeoLite2 database loaded');
-}).catch(err => console.error('Error loading database:', err));
+const MAXMIND_ACCOUNT_ID = process.env.MAXMIND_ACCOUNT_ID || '1131107';
+const MAXMIND_LICENSE_KEY = process.env.MAXMIND_LICENSE_KEY; // No default—must be set
 
 app.use(express.json());
+app.use(express.static('public'));
+
+const getGeoData = async (ip) => {
+  if (!MAXMIND_LICENSE_KEY) {
+    throw new Error('MaxMind license key not configured');
+  }
+  try {
+    const response = await axios.get(`https://geoip.maxmind.com/geoip/v2.1/insights/${ip}`, {
+      auth: { username: MAXMIND_ACCOUNT_ID, password: MAXMIND_LICENSE_KEY }
+    });
+    const data = response.data;
+    console.log(`GeoIP2 Insights response for ${ip}:`, JSON.stringify(data, null, 2));
+    const geo = {
+      status: 'success',
+      query: ip,
+      country: data.country?.names?.en || 'Unknown',
+      countryCode: data.country?.iso_code || 'N/A',
+      region: data.subdivisions?.[0]?.iso_code || 'Unknown',
+      regionName: data.subdivisions?.[0]?.names?.en || 'Unknown',
+      city: data.city?.names?.en || 'Unknown',
+      lat: data.location?.latitude || 0,
+      lon: data.location?.longitude || 0,
+      timezone: data.location?.time_zone || 'Unknown',
+      isp: data.traits?.isp || 'Unknown',
+      organization: data.traits?.organization || 'Unknown',
+      userType: data.traits?.user_type || 'Unknown',
+      isAnonymous: data.traits?.is_anonymous || false
+    };
+    if (!data.city?.names?.en || !data.subdivisions?.[0]?.iso_code) {
+      console.log(`Falling back to ip-api.com for ${ip}`);
+      const fallback = await axios.get(`http://ip-api.com/json/${ip}`);
+      const fbData = fallback.data;
+      if (fbData.status === 'success') {
+        geo.region = fbData.region || geo.region;
+        geo.regionName = fbData.regionName || geo.regionName;
+        geo.city = fbData.city || geo.city;
+        geo.lat = fbData.lat || geo.lat;
+        geo.lon = fbData.lon || geo.lon;
+        geo.timezone = fbData.timezone || geo.timezone;
+      }
+    }
+    return geo;
+  } catch (err) {
+    console.error(`GeoIP2 error for ${ip}: ${err.message}`);
+    return null;
+  }
+};
 
 app.get('/', (req, res) => {
-  res.send('Welcome to My IP Geolocation API!');
+  res.sendFile('index.html', { root: 'public' });
 });
 
-app.get('/json/:ip?', (req, res) => {
-  const rawIp = req.params.ip;
-  const ip = rawIp ? rawIp : (req.ip === '::1' ? '127.0.0.1' : req.ip); // Fixed logic
-  console.log(`Raw param ip: ${rawIp}`);
-  console.log(`Processed IP: ${ip}`);
-  if (!ip.match(/^(\d{1,3}\.){3}\d{1,3}$/) && !ip.match(/^([0-9a-fA-F]{0,4}:){7}[0-9a-fA-F]{0,4}$/)) {
-    return res.status(400).json({ status: 'fail', message: 'Invalid IP address' });
-  }
-  const geo = lookup.get(ip);
-  console.log(`Lookup result for ${ip}:`, geo);
-  if (!geo) {
-    return res.status(404).json({ status: 'fail', message: 'IP not found in database' });
-  }
-  const response = {
-    status: 'success',
-    query: ip,
-    country: geo.country?.names?.en || 'Unknown',
-    countryCode: geo.country?.iso_code || 'N/A',
-    region: geo.subdivisions?.[0]?.names?.en || 'Unknown',
-    regionName: geo.subdivisions?.[0]?.names?.en || 'Unknown',
-    city: geo.city?.names?.en || 'Unknown',
-    lat: geo.location?.latitude || 0,
-    lon: geo.location?.longitude || 0,
-    timezone: geo.location?.time_zone || 'Unknown',
-  };
-  res.json(response);
+app.get('/json/:ip?', async (req, res) => {
+  const ip = req.params.ip || req.ip;
+  const data = await getGeoData(ip);
+  if (!data) return res.status(404).json({ status: 'fail', message: 'IP not found' });
+  res.json(data);
+});
+
+app.get('/xml/:ip?', async (req, res) => {
+  const ip = req.params.ip || req.ip;
+  const data = await getGeoData(ip);
+  if (!data) return res.status(404).send('<response><status>fail</status><message>IP not found</message></response>');
+  const xml = xmlJs.js2xml({ response: data }, { compact: true, spaces: 2 });
+  res.set('Content-Type', 'application/xml');
+  res.send(xml);
+});
+
+app.get('/csv/:ip?', async (req, res) => {
+  const ip = req.params.ip || req.ip;
+  const data = await getGeoData(ip);
+  if (!data) return res.status(404).send('status,message\nfail,IP not found');
+  const csv = parse([data], { fields: Object.keys(data) });
+  res.set('Content-Type', 'text/csv');
+  res.send(csv);
 });
 
 app.listen(port, () => {
