@@ -89,3 +89,27 @@ app.get('/csv/:ip?', async (req, res) => {
 app.listen(port, () => {
   console.log(`API running on http://localhost:${port}`);
 });
+
+const rateLimit = require('express-rate-limit');
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per window
+  message: { status: 'fail', message: 'Too many requests from this IP' }
+});
+
+app.use(limiter);
+
+const API_KEY = process.env.API_KEY || 'your-default-key';
+
+const checkApiKey = (req, res, next) => {
+  const key = req.query.key || req.headers['x-api-key'];
+  if (!key || key !== API_KEY) {
+    return res.status(401).json({ status: 'fail', message: 'Invalid API key' });
+  }
+  next();
+};
+
+app.get('/json/:ip?', checkApiKey, async (req, res) => { /* ... */ });
+app.get('/xml/:ip?', checkApiKey, async (req, res) => { /* ... */ });
+app.get('/csv/:ip?', checkApiKey, async (req, res) => { /* ... */ });

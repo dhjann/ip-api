@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^1.8.1",
     "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
     "json2csv": "^6.0.0-alpha.2",
     "maxmind": "^4.3.24",
     "xml-js": "^1.6.11"
