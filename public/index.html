@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IP Geolocation API</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      color: #333;
+      line-height: 1.6;
+    }
+    header {
+      background: #007bff;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+    nav {
+      background: #f8f9fa;
+      padding: 10px;
+      text-align: center;
+    }
+    nav a {
+      color: #007bff;
+      margin: 0 15px;
+      text-decoration: none;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+    h2 {
+      color: #007bff;
+      margin-top: 30px;
+    }
+    p {
+      font-size: 16px;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: 'Courier New', Courier, monospace;
+    }
+    .example {
+      margin: 20px 0;
+    }
+    .example a {
+      color: #007bff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>IP Geolocation API</h1>
+  </header>
+  <nav>
+    <a href="/">Home</a>
+    <a href="#docs">API Docs</a>
+    <a href="#examples">Examples</a>
+  </nav>
+  <div class="container">
+    <h2>Welcome</h2>
+    <p>Free IP Geolocation API to determine geolocation from IP addresses. Supports JSON, XML, and CSV formats.</p>
+
+    <h2 id="docs">API Documentation</h2>
+    <p>Use the following endpoints to retrieve geolocation data:</p>
+    <ul>
+      <li><code>/json/[ip]</code> - JSON format (e.g., <a href="/json/8.8.8.8">/json/8.8.8.8</a>)</li>
+      <li><code>/xml/[ip]</code> - XML format (e.g., <a href="/xml/8.8.8.8">/xml/8.8.8.8</a>)</li>
+      <li><code>/csv/[ip]</code> - CSV format (e.g., <a href="/csv/8.8.8.8">/csv/8.8.8.8</a>)</li>
+    </ul>
+
+    <h2 id="examples">Examples</h2>
+    <div class="example">
+      <h3>JSON</h3>
+      <pre><code>GET /json/8.8.8.8
