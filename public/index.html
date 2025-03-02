@@ -14,7 +14,7 @@
       line-height: 1.6;
     }
     header {
-      background: #000000;
+      background: black; /* Black banner as per your update */
       color: #fff;
       padding: 20px;
       text-align: center;
@@ -22,6 +22,13 @@
     header h1 {
       margin: 0;
       font-size: 28px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    header img {
+      max-height: 50px;
+      vertical-align: middle;
+      margin-right: 10px;
     }
     nav {
       background: #f8f9fa;
@@ -37,9 +44,53 @@
       text-decoration: underline;
     }
     .container {
-      max-width: 900px;
+      max-width: 1200px;
       margin: 20px auto;
       padding: 0 20px;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .search-section {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .search-section input {
+      padding: 10px;
+      width: 300px;
+      font-size: 16px;
+    }
+    .search-section button {
+      padding: 10px 20px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .search-section button:hover {
+      background: #0056b3;
+    }
+    .results {
+      display: flex;
+      width: 100%;
+      gap: 20px;
+    }
+    .json-output {
+      flex: 1;
+      background: #f4f4f4;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    .map {
+      flex: 1;
+      min-height: 400px;
+      border: 1px solid #ccc;
+    }
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
     }
     h2 {
       color: #007bff;
@@ -48,22 +99,24 @@
     p {
       font-size: 16px;
     }
-    pre {
+    .docs, .examples {
+      width: 100%;
+      margin: 20px 0;
+    }
+    code {
+      font-family: 'Courier New', Courier, monospace;
+    }
+    .example pre {
       background: #f4f4f4;
       padding: 15px;
       border-radius: 5px;
       overflow-x: auto;
     }
-    code {
-      font-family: 'Courier New', Courier, monospace;
-    }
-    .example {
-      margin: 20px 0;
-    }
-    .example a {
-      color: #007bff;
+    #result, #map {
+      display: none;
     }
   </style>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaocglvHIK3KkLkcr60jm0wlWmDK7KbwI"></script>
 </head>
 <body>
   <header>
@@ -76,18 +129,26 @@
     <a href="#examples">Examples</a>
   </nav>
   <div class="container">
-    <h2>Welcome</h2>
-    <p>Free IP Geolocation API to determine geolocation from IP addresses. Supports JSON, XML, and CSV formats.</p>
-
-    <h2 id="docs">API Documentation</h2>
-    <p>Use the following endpoints to retrieve geolocation data:</p>
-    <ul>
-      <li><code>/json/[ip]</code> - JSON format (e.g., <a href="/json/8.8.8.8">/json/8.8.8.8</a>)</li>
-      <li><code>/xml/[ip]</code> - XML format (e.g., <a href="/xml/8.8.8.8">/xml/8.8.8.8</a>)</li>
-      <li><code>/csv/[ip]</code> - CSV format (e.g., <a href="/csv/8.8.8.8">/csv/8.8.8.8</a>)</li>
-    </ul>
-
-    <h2 id="examples">Examples</h2>
-    <div class="example">
-      <h3>JSON</h3>
-      <pre><code>GET /json/8.8.8.8
+    <div class="search-section">
+      <h2>API Demo</h2>
+      <input type="text" id="ipInput" placeholder="Search any IP address/domain (e.g., 8.8.8.8)">
+      <button onclick="lookupIP()">SEARCH</button>
+    </div>
+    <div class="results">
+      <div class="json-output" id="result"></div>
+      <div class="map" id="map"></div>
+    </div>
+    <div class="docs" id="docs">
+      <h2>API Documentation</h2>
+      <p>Use the following endpoints to retrieve geolocation data (optional API key: <code>?key=your-secret-key</code>). Rate limit: 100 requests per IP per 15 minutes.</p>
+      <ul>
+        <li><code>/json/[ip]</code> - JSON format (e.g., <a href="/json/8.8.8.8">/json/8.8.8.8</a>)</li>
+        <li><code>/xml/[ip]</code> - XML format (e.g., <a href="/xml/8.8.8.8">/xml/8.8.8.8</a>)</li>
+        <li><code>/csv/[ip]</code> - CSV format (e.g., <a href="/csv/8.8.8.8">/csv/8.8.8.8</a>)</li>
+      </ul>
+    </div>
+    <div class="examples" id="examples">
+      <h2>Examples</h2>
+      <div class="example">
+        <h3>JSON</h3>
+        <pre><code>GET /json/8.8.8.8
