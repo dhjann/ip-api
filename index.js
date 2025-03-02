@@ -100,7 +100,7 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
-const API_KEY = process.env.API_KEY || 'your-default-key';
+const API_KEY = process.env.API_KEY || 'abc123XYZ!';
 
 const checkApiKey = (req, res, next) => {
   const key = req.query.key || req.headers['x-api-key'];
