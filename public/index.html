@@ -140,7 +140,7 @@
     </div>
     <div class="docs" id="docs">
       <h2>API Documentation</h2>
-      <p>Use the following endpoints to retrieve geolocation data (optional API key: <code>?key=your-secret-key</code>). Rate limit: 100 requests per IP per 15 minutes.</p>
+      <p>Use the following endpoints to retrieve geolocation data (optional API key: <code>?key=abc123XYZ!</code>). Rate limit: 100 requests per IP per 15 minutes.</p>
       <ul>
         <li><code>/json/[ip]?key=abc123XYZ!</code> - JSON format (e.g., <a href="/json/8.8.8.8?key=abc123XYZ!">/json/8.8.8.8</a>)</li>
         <li><code>/xml/[ip]?key=abc123XYZ!</code> - XML format (e.g., <a href="/xml/8.8.8.8?key=abc123XYZ!">/xml/8.8.8.8</a>)</li>
@@ -151,4 +151,91 @@
       <h2>Examples</h2>
       <div class="example">
         <h3>JSON</h3>
-        <pre><code>GET /json/8.8.8.8
+        <pre><code>GET /json/8.8.8.8?key=abc123XYZ!
+{
+  "status": "success",
+  "query": "8.8.8.8",
+  "country": "United States",
+  "countryCode": "US",
+  "region": "VA",
+  "regionName": "Virginia",
+  "city": "Ashburn",
+  "lat": 39.03,
+  "lon": -77.5,
+  "timezone": "America/New_York",
+  "isp": "Google",
+  "organization": "Google",
+  "userType": "business",
+  "isAnonymous": false
+}</code></pre>
+      </div>
+      <div class="example">
+        <h3>XML</h3>
+        <pre><code>GET /xml/8.8.8.8?key=abc123XYZ!
+<response>
+  <status>success</status>
+  <query>8.8.8.8</query>
+  <country>United States</country>
+  <countryCode>US</countryCode>
+  <region>VA</region>
+  <regionName>Virginia</regionName>
+  <city>Ashburn</city>
+  <lat>39.03</lat>
+  <lon>-77.5</lon>
+  <timezone>America/New_York</timezone>
+  <isp>Google</isp>
+  <organization>Google</organization>
+  <userType>business</userType>
+  <isAnonymous>false</isAnonymous>
+</response></code></pre>
+      </div>
+      <div class="example">
+        <h3>CSV</h3>
+        <pre><code>GET /csv/8.8.8.8?key=abc123XYZ!
+"status","query","country","countryCode","region","regionName","city","lat","lon","timezone","isp","organization","userType","isAnonymous"
+"success","8.8.8.8","United States","US","VA","Virginia","Ashburn",39.03,-77.5,"America/New_York","Google","Google","business",false</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function lookupIP() {
+      const ip = document.getElementById('ipInput').value || '8.8.8.8';
+      console.log(`Fetching data for IP: ${ip}`);
+      try {
+        const response = await fetch(`/json/${ip}?key=abc123XYZ!`);
+        console.log(`Response status: ${response.status}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        console.log(`Data received:`, data);
+        document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+        document.getElementById('result').style.display = 'block';
+        try {
+          const map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: data.lat, lng: data.lon },
+            zoom: 12
+          });
+          new google.maps.Marker({
+            position: { lat: data.lat, lng: data.lon },
+            map: map,
+            title: data.city + ', ' + data.regionName
+          });
+          document.getElementById('map').style.display = 'block';
+          console.log('Map initialized successfully');
+        } catch (mapError) {
+          console.error('Map error:', mapError.message);
+          document.getElementById('map').style.display = 'none';
+          document.getElementById('result').textContent += `\nMap error: ${mapError.message}`;
+        }
+      } catch (err) {
+        console.error('Fetch error:', err);
+        document.getElementById('result').textContent = `Error fetching data: ${err.message}`;
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('map').style.display = 'none';
+      }
+    }
+    // Auto-run for default IP
+    window.onload = () => lookupIP();
+  </script>
+</body>
+</html>
