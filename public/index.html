@@ -95,6 +95,15 @@
       font-size: 14px;
       color: #333;
     }
+    .json-output pre {
+      margin: 0;
+      white-space: pre-wrap;
+      font-family: 'Courier New', Courier, monospace;
+    }
+    .json-output .key { color: #92278f; } /* Purple for keys */
+    .json-output .string { color: #008000; } /* Green for strings */
+    .json-output .number { color: #0000ff; } /* Blue for numbers */
+    .json-output .boolean { color: #ff0000; } /* Red for booleans */
     .map {
       flex: 1;
       min-height: 400px;
@@ -132,6 +141,10 @@
       overflow-x: auto;
       font-size: 14px;
     }
+    .example .key { color: #92278f; }
+    .example .string { color: #008000; }
+    .example .number { color: #0000ff; }
+    .example .boolean { color: #ff0000; }
     #result, #map {
       display: none;
     }
@@ -151,7 +164,7 @@
   <div class="container">
     <div class="search-section">
       <h2>API Demo</h2>
-      <input type="text" id="ipInput" placeholder="Search any IP address/domain (e.g., 8.8.8.8)">
+      <input type="text" id="ipInput" placeholder="Search any IP address/domain (e.g., user’s IP)">
       <button onclick="lookupIP()">SEARCH</button>
     </div>
     <div class="results">
@@ -171,30 +184,29 @@
       <h2>Examples</h2>
       <div class="example">
         <h3>JSON</h3>
-        <pre><code>GET /json/8.8.8.8?key=abc123XYZ!
-{
-  "status": "success",
-  "query": "8.8.8.8",
-  "country": "United States",
-  "countryCode": "US",
-  "region": "VA",
-  "regionName": "Virginia",
-  "city": "Ashburn",
-  "lat": 39.03,
-  "lon": -77.5,
-  "timezone": "America/New_York",
-  "isp": "Google",
-  "organization": "Google",
-  "userType": "business",
-  "isAnonymous": false
+        <pre><code class="json">GET /json/[user-ip]?key=abc123XYZ!
+<span class="key">"status"</span>: <span class="string">"success"</span>,
+<span class="key">"query"</span>: <span class="string">"[user-ip]"</span>,
+<span class="key">"country"</span>: <span class="string">"United States"</span>,
+<span class="key">"countryCode"</span>: <span class="string">"US"</span>,
+<span class="key">"region"</span>: <span class="string">"VA"</span>,
+<span class="key">"regionName"</span>: <span class="string">"Virginia"</span>,
+<span class="key">"city"</span>: <span class="string">"Ashburn"</span>,
+<span class="key">"lat"</span>: <span class="number">39.03</span>,
+<span class="key">"lon"</span>: <span class="number">-77.5</span>,
+<span class="key">"timezone"</span>: <span class="string">"America/New_York"</span>,
+<span class="key">"isp"</span>: <span class="string">"Google"</span>,
+<span class="key">"organization"</span>: <span class="string">"Google"</span>,
+<span class="key">"userType"</span>: <span class="string">"business"</span>,
+<span class="key">"isAnonymous"</span>: <span class="boolean">false</span>
 }</code></pre>
       </div>
       <div class="example">
         <h3>XML</h3>
-        <pre><code>GET /xml/8.8.8.8?key=abc123XYZ!
+        <pre><code>GET /xml/[user-ip]?key=abc123XYZ!
 <response>
   <status>success</status>
-  <query>8.8.8.8</query>
+  <query>[user-ip]</query>
   <country>United States</country>
   <countryCode>US</countryCode>
   <region>VA</region>
@@ -211,16 +223,29 @@
       </div>
       <div class="example">
         <h3>CSV</h3>
-        <pre><code>GET /csv/8.8.8.8?key=abc123XYZ!
+        <pre><code>GET /csv/[user-ip]?key=abc123XYZ!
 "status","query","country","countryCode","region","regionName","city","lat","lon","timezone","isp","organization","userType","isAnonymous"
-"success","8.8.8.8","United States","US","VA","Virginia","Ashburn",39.03,-77.5,"America/New_York","Google","Google","business",false</code></pre>
+"success","[user-ip]","United States","US","VA","Virginia","Ashburn",39.03,-77.5,"America/New_York","Google","Google","business",false</code></pre>
       </div>
     </div>
   </div>
 
   <script>
-    async function lookupIP() {
-      const ip = document.getElementById('ipInput').value || '8.8.8.8';
+    async function getUserIP() {
+      try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        return data.ip;
+      } catch (err) {
+        console.error('Error fetching user IP:', err);
+        return '8.8.8.8'; // Fallback to Google DNS if user IP fails
+      }
+    }
+
+    async function lookupIP(ip = null) {
+      if (!ip) ip = await getUserIP();
+      document.getElementById('ipInput').value = ip; // Set input to user’s IP
       console.log(`Fetching data for IP: ${ip}`);
       try {
         const response = await fetch(`/json/${ip}?key=abc123XYZ!`);
@@ -228,7 +253,23 @@
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
         console.log(`Data received:`, data);
-        document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+        // Format JSON with syntax highlighting for display
+        let formattedJson = '';
+        JSON.stringify(data, (key, value) => {
+          if (key) {
+            formattedJson += `<span class="key">"${key}"</span>: `;
+          }
+          if (typeof value === 'string') {
+            formattedJson += `<span class="string">"${value}"</span>,`;
+          } else if (typeof value === 'number') {
+            formattedJson += `<span class="number">${value}</span>,`;
+          } else if (typeof value === 'boolean') {
+            formattedJson += `<span class="boolean">${value}</span>,`;
+          }
+          return value;
+        });
+        formattedJson = `{${formattedJson.slice(0, -1)}}`; // Remove last comma
+        document.getElementById('result').innerHTML = formattedJson;
         document.getElementById('result').style.display = 'block';
         try {
           const map = new google.maps.Map(document.getElementById('map'), {
@@ -254,7 +295,7 @@
         document.getElementById('map').style.display = 'none';
       }
     }
-    // Auto-run for default IP
+    // Auto-run for user’s IP on page load
     window.onload = () => lookupIP();
   </script>
 </body>
