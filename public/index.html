@@ -124,7 +124,7 @@
       font-size: 16px;
       margin-bottom: 15px;
     }
-    .docs, .examples {
+    .examples {
       margin: 20px 0;
     }
     code {
@@ -158,7 +158,6 @@
   </header>
   <nav>
     <a href="/">Home</a>
-    <a href="#docs">API Docs</a>
     <a href="#examples">Examples</a>
   </nav>
   <div class="container">
@@ -170,15 +169,6 @@
     <div class="results">
       <div class="json-output" id="result"></div>
       <div class="map" id="map"></div>
-    </div>
-    <div class="docs" id="docs">
-      <h2>API Documentation</h2>
-      <p>Use the following endpoints to retrieve geolocation data (optional API key: <code>?key=[your-api-key]</code>). Contact support or register at <a href="mailto:support@ip-api-mvtp.onrender.com">support@ip-api-mvtp.onrender.com</a> to obtain an API key. Rate limit: 100 requests per IP per 15 minutes.</p>
-      <ul>
-        <li><code>/json/[ip]</code> - JSON format (e.g., <a href="/json/8.8.8.8">/json/8.8.8.8</a>)</li>
-        <li><code>/xml/[ip]</code> - XML format (e.g., <a href="/xml/8.8.8.8">/xml/8.8.8.8</a>)</li>
-        <li><code>/csv/[ip]</code> - CSV format (e.g., <a href="/csv/8.8.8.8">/csv/8.8.8.8</a>)</li>
-      </ul>
     </div>
     <div class="examples" id="examples">
       <h2>Examples</h2>
@@ -248,14 +238,14 @@
       document.getElementById('ipInput').value = ip; // Set input to user’s IP
       console.log(`Fetching data for IP: ${ip}`);
       try {
-        const response = await fetch(`/json/${ip}?key=abc123XYZ!`);
+        const response = await fetch(`/json/${ip}?key=abc123XYZ!`); // Keep key here, hidden from public view
         console.log(`Response status: ${response.status}`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
         console.log(`Data received:`, data);
-        // Format JSON with syntax highlighting for display, stacked vertically
+        // Format JSON with syntax highlighting for display, stacked vertically, without exposing API key
         let formattedJson = '<pre><code class="json">';
-        formattedJson += `GET /json/${ip}?key=abc123XYZ!\n`;
+        formattedJson += `GET /json/${ip}\n`; // Remove ?key=abc123XYZ! from display
         for (let key in data) {
           formattedJson += `<span class="key">"${key}"</span>: `;
           if (typeof data[key] === 'string') {
