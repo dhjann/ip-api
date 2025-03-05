@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const xmlJs = require('xml-js');
 const { parse } = require('json2csv');
-const geoip2 = require('geoip2-node').GeoIP2;
+const { WebServiceClient } = require('@maxmind/geoip2-node');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -13,7 +13,7 @@ const API_KEY = process.env.API_KEY || 'abc123XYZ!'; // Match your key
 app.use(express.json());
 app.use(express.static('public'));
 
-const client = new geoip2(MAXMIND_ACCOUNT_ID, MAXMIND_LICENSE_KEY);
+const client = new WebServiceClient(MAXMIND_ACCOUNT_ID, MAXMIND_LICENSE_KEY, { host: 'geoip.maxmind.com' });
 
 const getGeoData = async (ip) => {
   if (!MAXMIND_LICENSE_KEY) {
