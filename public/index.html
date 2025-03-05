@@ -181,35 +181,23 @@
 <span class="key">"continentCode"</span>: <span class="string">"NA"</span>,
 <span class="key">"country"</span>: <span class="string">"United States"</span>,
 <span class="key">"countryCode"</span>: <span class="string">"US"</span>,
-<span class="key">"euCountry"</span>: <span class="string">"No"</span>,
-<span class="key">"registeredCountry"</span>: <span class="string">"United States"</span>,
-<span class="key">"euRegisteredCountry"</span>: <span class="string">"No"</span>,
-<span class="key">"representedCountry"</span>: <span class="string">"United States"</span>,
-<span class="key">"localizedNames"</span>: <span class="string">{}</span>,
-<span class="key">"network"</span>: <span class="string">"N/A"</span>,
-<span class="key">"subdivisions"</span>: <span class="string">[{ "name": "Virginia", "iso_code": "VA" }]</span>,
+<span class="key">"region"</span>: <span class="string">"VA"</span>,
+<span class="key">"regionName"</span>: <span class="string">"Virginia"</span>,
 <span class="key">"city"</span>: <span class="string">"Ashburn"</span>,
-<span class="key">"postalCode"</span>: <span class="string">""</span>,
+<span class="key">"district"</span>: <span class="string">""</span>,
+<span class="key">"zip"</span>: <span class="string">""</span>,
 <span class="key">"lat"</span>: <span class="number">39.03</span>,
 <span class="key">"lon"</span>: <span class="number">-77.5</span>,
-<span class="key">"accuracyRadius"</span>: <span class="number">0</span>,
-<span class="key">"timeZone"</span>: <span class="string">"America/New_York"</span>,
-<span class="key">"connectionType"</span>: <span class="string">"Unknown"</span>,
-<span class="key">"metroCode"</span>: <span class="string">""</span>,
-<span class="key">"mobileCountryCode"</span>: <span class="string">""</span>,
-<span class="key">"mobileNetworkCode"</span>: <span class="string">""</span>,
+<span class="key">"timezone"</span>: <span class="string">"America/New_York"</span>,
+<span class="key">"offset"</span>: <span class="number">-18000</span>,
+<span class="key">"currency"</span>: <span class="string">"USD"</span>,
 <span class="key">"isp"</span>: <span class="string">"Google"</span>,
 <span class="key">"org"</span>: <span class="string">"Google"</span>,
-<span class="key">"asNumber"</span>: <span class="number">0</span>,
-<span class="key">"asOrganization"</span>: <span class="string">"Unknown"</span>,
-<span class="key">"domain"</span>: <span class="string">"Unknown"</span>,
-<span class="key">"anonymizerType"</span>: <span class="string">"Not Anonymous"</span>,
-<span class="key">"staticIPScore"</span>: <span class="number">0</span>,
-<span class="key">"userCount"</span>: <span class="number">0</span>,
-<span class="key">"userType"</span>: <span class="string">"business"</span>,
-<span class="key">"confidenceFactors"</span>: <span class="string">{}</span>,
-<span class="key">"averageIncome"</span>: <span class="string">""</span>,
-<span class="key">"populationDensity"</span>: <span class="string">""</span>
+<span class="key">"as"</span>: <span class="string">""</span>,
+<span class="key">"asname"</span>: <span class="string">""</span>,
+<span class="key">"mobile"</span>: <span class="boolean">false</span>,
+<span class="key">"proxy"</span>: <span class="boolean">false</span>,
+<span class="key">"hosting"</span>: <span class="boolean">false</span>
 }</code></pre>
       </div>
       <div class="example">
@@ -222,42 +210,30 @@
   <continentCode>NA</continentCode>
   <country>United States</country>
   <countryCode>US</countryCode>
-  <euCountry>No</euCountry>
-  <registeredCountry>United States</registeredCountry>
-  <euRegisteredCountry>No</euRegisteredCountry>
-  <representedCountry>United States</representedCountry>
-  <localizedNames>{}</localizedNames>
-  <network>N/A</network>
-  <subdivisions><subdivision><name>Virginia</name><iso_code>VA</iso_code></subdivision></subdivisions>
+  <region>VA</region>
+  <regionName>Virginia</regionName>
   <city>Ashburn</city>
-  <postalCode></postalCode>
+  <district></district>
+  <zip></zip>
   <lat>39.03</lat>
   <lon>-77.5</lon>
-  <accuracyRadius>0</accuracyRadius>
-  <timeZone>America/New_York</timeZone>
-  <connectionType>Unknown</connectionType>
-  <metroCode></metroCode>
-  <mobileCountryCode></mobileCountryCode>
-  <mobileNetworkCode></mobileNetworkCode>
+  <timezone>America/New_York</timezone>
+  <offset>-18000</offset>
+  <currency>USD</currency>
   <isp>Google</isp>
   <org>Google</org>
-  <asNumber>0</asNumber>
-  <asOrganization>Unknown</asOrganization>
-  <domain>Unknown</domain>
-  <anonymizerType>Not Anonymous</anonymizerType>
-  <staticIPScore>0</staticIPScore>
-  <userCount>0</userCount>
-  <userType>business</userType>
-  <confidenceFactors>{}</confidenceFactors>
-  <averageIncome></averageIncome>
-  <populationDensity></populationDensity>
+  <as></as>
+  <asname></asname>
+  <mobile>false</mobile>
+  <proxy>false</proxy>
+  <hosting>false</hosting>
 </response></code></pre>
       </div>
       <div class="example">
         <h3>CSV</h3>
         <pre><code>GET /csv/[user-ip]
-"status","query","continent","continentCode","country","countryCode","euCountry","registeredCountry","euRegisteredCountry","representedCountry","localizedNames","network","subdivisions","city","postalCode","lat","lon","accuracyRadius","timeZone","connectionType","metroCode","mobileCountryCode","mobileNetworkCode","isp","org","asNumber","asOrganization","domain","anonymizerType","staticIPScore","userCount","userType","confidenceFactors","averageIncome","populationDensity"
-"success","[user-ip]","North America","NA","United States","US","No","United States","No","United States","","N/A","{ \"name\": \"Virginia\", \"iso_code\": \"VA\" }","Ashburn","","39.03","-77.5","0","America/New_York","Unknown","","","","Google","Google","0","Unknown","Unknown","Not Anonymous","0","0","business","","",""</code></pre>
+"status","query","continent","continentCode","country","countryCode","region","regionName","city","district","zip","lat","lon","timezone","offset","currency","isp","org","as","asname","mobile","proxy","hosting"
+"success","[user-ip]","North America","NA","United States","US","VA","Virginia","Ashburn","","",39.03,-77.5,"America/New_York",-18000,"USD","Google","Google","","",false,false,false</code></pre>
       </div>
     </div>
   </div>
@@ -296,10 +272,6 @@
             formattedJson += `<span class="number">${data[key]}</span>,`;
           } else if (typeof data[key] === 'boolean') {
             formattedJson += `<span class="boolean">${data[key]}</span>,`;
-          } else if (Array.isArray(data[key])) {
-            formattedJson += `<span class="string">"${JSON.stringify(data[key])}"</span>,`;
-          } else if (typeof data[key] === 'object' && data[key] !== null) {
-            formattedJson += `<span class="string">"${JSON.stringify(data[key])}"</span>,`;
           }
           formattedJson += '\n';
         }
