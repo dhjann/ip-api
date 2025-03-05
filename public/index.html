@@ -171,11 +171,20 @@
       <div class="json-output" id="result"></div>
       <div class="map" id="map"></div>
     </div>
+    <div class="docs" id="docs">
+      <h2>API Documentation</h2>
+      <p>Use the following endpoints to retrieve geolocation data (optional API key: <code>?key=[your-api-key]</code>). Contact support or register at <a href="mailto:support@ip-api-mvtp.onrender.com">support@ip-api-mvtp.onrender.com</a> to obtain an API key. Rate limit: 100 requests per IP per 15 minutes.</p>
+      <ul>
+        <li><code>/json/[ip]</code> - JSON format (e.g., <a href="/json/8.8.8.8">/json/8.8.8.8</a>)</li>
+        <li><code>/xml/[ip]</code> - XML format (e.g., <a href="/xml/8.8.8.8">/xml/8.8.8.8</a>)</li>
+        <li><code>/csv/[ip]</code> - CSV format (e.g., <a href="/csv/8.8.8.8">/csv/8.8.8.8</a>)</li>
+      </ul>
+    </div>
     <div class="examples" id="examples">
       <h2>Examples</h2>
       <div class="example">
         <h3>JSON</h3>
-        <pre><code class="json">GET /json/[user-ip]?key=abc123XYZ!
+        <pre><code class="json">GET /json/[user-ip]
 <span class="key">"status"</span>: <span class="string">"success"</span>,
 <span class="key">"query"</span>: <span class="string">"[user-ip]"</span>,
 <span class="key">"country"</span>: <span class="string">"United States"</span>,
@@ -194,7 +203,7 @@
       </div>
       <div class="example">
         <h3>XML</h3>
-        <pre><code>GET /xml/[user-ip]?key=abc123XYZ!
+        <pre><code>GET /xml/[user-ip]
 <response>
   <status>success</status>
   <query>[user-ip]</query>
@@ -214,7 +223,7 @@
       </div>
       <div class="example">
         <h3>CSV</h3>
-        <pre><code>GET /csv/[user-ip]?key=abc123XYZ!
+        <pre><code>GET /csv/[user-ip]
 "status","query","country","countryCode","region","regionName","city","lat","lon","timezone","isp","organization","userType","isAnonymous"
 "success","[user-ip]","United States","US","VA","Virginia","Ashburn",39.03,-77.5,"America/New_York","Google","Google","business",false</code></pre>
       </div>
@@ -244,22 +253,21 @@
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
         console.log(`Data received:`, data);
-        // Format JSON with syntax highlighting for display
-        let formattedJson = '';
-        JSON.stringify(data, (key, value) => {
-          if (key) {
-            formattedJson += `<span class="key">"${key}"</span>: `;
+        // Format JSON with syntax highlighting for display, stacked vertically
+        let formattedJson = '<pre><code class="json">';
+        formattedJson += `GET /json/${ip}?key=abc123XYZ!\n`;
+        for (let key in data) {
+          formattedJson += `<span class="key">"${key}"</span>: `;
+          if (typeof data[key] === 'string') {
+            formattedJson += `<span class="string">"${data[key]}"</span>,`;
+          } else if (typeof data[key] === 'number') {
+            formattedJson += `<span class="number">${data[key]}</span>,`;
+          } else if (typeof data[key] === 'boolean') {
+            formattedJson += `<span class="boolean">${data[key]}</span>,`;
           }
-          if (typeof value === 'string') {
-            formattedJson += `<span class="string">"${value}"</span>,`;
-          } else if (typeof value === 'number') {
-            formattedJson += `<span class="number">${value}</span>,`;
-          } else if (typeof value === 'boolean') {
-            formattedJson += `<span class="boolean">${value}</span>,`;
-          }
-          return value;
-        });
-        formattedJson = `{${formattedJson.slice(0, -1)}}`; // Remove last comma
+          formattedJson += '\n';
+        }
+        formattedJson = formattedJson.slice(0, -2) + '</code></pre>'; // Remove last comma and newline, close tags
         document.getElementById('result').innerHTML = formattedJson;
         document.getElementById('result').style.display = 'block';
         try {
