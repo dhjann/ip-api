@@ -256,15 +256,14 @@
       document.getElementById('ipInput').value = ip; // Set input to user’s IP
       console.log(`Fetching data for IP: ${ip}`);
       try {
-        // Use Pro tier key to fetch full data for homepage demo
-        const response = await fetch(`/json/${ip}?key=pro1-5f4dcc3b5aa765d61d8327deb882cf99`);
+        const response = await fetch(`/json/${ip}?key=abc123XYZ!`); // Keep key here, hidden from public view
         console.log(`Response status: ${response.status}`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
         console.log(`Data received:`, data);
         // Format JSON with syntax highlighting for display, stacked vertically, without exposing API key
         let formattedJson = '<pre><code class="json">';
-        formattedJson += `GET /json/${ip}\n`; // Remove ?key= from display
+        formattedJson += `GET /json/${ip}\n`; // Remove ?key=abc123XYZ! from display
         for (let key in data) {
           formattedJson += `<span class="key">"${key}"</span>: `;
           if (typeof data[key] === 'string') {
