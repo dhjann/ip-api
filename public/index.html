@@ -163,7 +163,6 @@
   </header>
   <nav>
     <a href="/">Home</a>
-    <a href="/pricing">Pricing</a>
     <a href="#examples">Examples</a>
   </nav>
   <div class="container">
@@ -179,67 +178,67 @@
     <div class="examples" id="examples">
       <h2>Examples</h2>
       <div class="example">
-        <h3>JSON (Full Example)</h3>
+        <h3>JSON</h3>
         <pre><code class="json">GET /json/[user-ip]
 <span class="key">"status"</span>: <span class="string">"success"</span>,
-<span class="key">"ipAddress"</span>: <span class="string">"[user-ip]"</span>,
-<span class="key">"geoContinent"</span>: <span class="string">"North America"</span>,
+<span class="key">"query"</span>: <span class="string">"[user-ip]"</span>,
+<span class="key">"continent"</span>: <span class="string">"North America"</span>,
 <span class="key">"continentCode"</span>: <span class="string">"NA"</span>,
-<span class="key">"countryName"</span>: <span class="string">"United States"</span>,
+<span class="key">"country"</span>: <span class="string">"United States"</span>,
 <span class="key">"countryCode"</span>: <span class="string">"US"</span>,
-<span class="key">"regionCode"</span>: <span class="string">"VA"</span>,
+<span class="key">"region"</span>: <span class="string">"VA"</span>,
 <span class="key">"regionName"</span>: <span class="string">"Virginia"</span>,
-<span class="key">"cityName"</span>: <span class="string">"Ashburn"</span>,
-<span class="key">"districtName"</span>: <span class="string">""</span>,
-<span class="key">"postalCode"</span>: <span class="string">""</span>,
-<span class="key">"latitude"</span>: <span class="number">39.03</span>,
-<span class="key">"longitude"</span>: <span class="number">-77.5</span>,
-<span class="key">"timeZone"</span>: <span class="string">"America/New_York"</span>,
-<span class="key">"timeOffset"</span>: <span class="number">-18000</span>,
-<span class="key">"currencyCode"</span>: <span class="string">"USD"</span>,
-<span class="key">"ispName"</span>: <span class="string">"Google"</span>,
-<span class="key">"orgName"</span>: <span class="string">"Google"</span>,
-<span class="key">"asNumber"</span>: <span class="string">""</span>,
-<span class="key">"asOrganization"</span>: <span class="string">""</span>,
-<span class="key">"isMobile"</span>: <span class="boolean">false</span>,
-<span class="key">"isProxy"</span>: <span class="boolean">false</span>,
-<span class="key">"isHosting"</span>: <span class="boolean">false</span>
+<span class="key">"city"</span>: <span class="string">"Ashburn"</span>,
+<span class="key">"district"</span>: <span class="string">""</span>,
+<span class="key">"zip"</span>: <span class="string">""</span>,
+<span class="key">"lat"</span>: <span class="number">39.03</span>,
+<span class="key">"lon"</span>: <span class="number">-77.5</span>,
+<span class="key">"timezone"</span>: <span class="string">"America/New_York"</span>,
+<span class="key">"offset"</span>: <span class="number">-18000</span>,
+<span class="key">"currency"</span>: <span class="string">"USD"</span>,
+<span class="key">"isp"</span>: <span class="string">"Google"</span>,
+<span class="key">"org"</span>: <span class="string">"Google"</span>,
+<span class="key">"as"</span>: <span class="string">""</span>,
+<span class="key">"asname"</span>: <span class="string">""</span>,
+<span class="key">"mobile"</span>: <span class="boolean">false</span>,
+<span class="key">"proxy"</span>: <span class="boolean">false</span>,
+<span class="key">"hosting"</span>: <span class="boolean">false</span>
 }</code></pre>
       </div>
       <div class="example">
-        <h3>XML (Full Example)</h3>
+        <h3>XML</h3>
         <pre><code>GET /xml/[user-ip]
 <response>
   <status>success</status>
-  <ipAddress>[user-ip]</ipAddress>
-  <geoContinent>North America</geoContinent>
+  <query>[user-ip]</query>
+  <continent>North America</continent>
   <continentCode>NA</continentCode>
-  <countryName>United States</countryName>
+  <country>United States</country>
   <countryCode>US</countryCode>
-  <regionCode>VA</regionCode>
+  <region>VA</region>
   <regionName>Virginia</regionName>
-  <cityName>Ashburn</cityName>
-  <districtName></districtName>
-  <postalCode></postalCode>
-  <latitude>39.03</latitude>
-  <longitude>-77.5</longitude>
-  <timeZone>America/New_York</timeZone>
-  <timeOffset>-18000</timeOffset>
-  <currencyCode>USD</currencyCode>
-  <ispName>Google</ispName>
-  <orgName>Google</orgName>
-  <asNumber></asNumber>
-  <asOrganization></asOrganization>
-  <isMobile>false</isMobile>
-  <isProxy>false</isProxy>
-  <isHosting>false</isHosting>
+  <city>Ashburn</city>
+  <district></district>
+  <zip></zip>
+  <lat>39.03</lat>
+  <lon>-77.5</lon>
+  <timezone>America/New_York</timezone>
+  <offset>-18000</offset>
+  <currency>USD</currency>
+  <isp>Google</isp>
+  <org>Google</org>
+  <as></as>
+  <asname></asname>
+  <mobile>false</mobile>
+  <proxy>false</proxy>
+  <hosting>false</hosting>
 </response></code></pre>
       </div>
       <div class="example">
-        <h3>CSV (Full Example)</h3>
+        <h3>CSV</h3>
         <pre><code>GET /csv/[user-ip]
-"status","ipAddress","geoContinent","continentCode","countryName","countryCode","regionCode","regionName","cityName","districtName","postalCode","latitude","longitude","timeZone","timeOffset","currencyCode","ispName","orgName","asNumber","asOrganization","isMobile","isProxy","isHosting"
-"success","[user-ip]","North America","NA","United States","US","VA","Virginia","Ashburn","","",39.03,-77.5,"America/New_York",-18000,"USD","Google","Google","","","false","false","false"</code></pre>
+"status","query","continent","continentCode","country","countryCode","region","regionName","city","district","zip","lat","lon","timezone","offset","currency","isp","org","as","asname","mobile","proxy","hosting"
+"success","[user-ip]","North America","NA","United States","US","VA","Virginia","Ashburn","","",39.03,-77.5,"America/New_York",-18000,"USD","Google","Google","","",false,false,false</code></pre>
       </div>
     </div>
   </div>
@@ -260,17 +259,16 @@
     async function lookupIP(ip = null) {
       if (!ip) ip = await getUserIP();
       document.getElementById('ipInput').value = ip; // Set input to user’s IP
-      console.log(`Fetching geolocation data for IP: ${ip}`);
+      console.log(`Fetching data for IP: ${ip}`);
       try {
-        // Use Pro tier key to fetch full data for homepage demo
-        const response = await fetch(`/json/${ip}?key=pro1-5f4dcc3b5aa765d61d8327deb882cf99`);
+        const response = await fetch(`/json/${ip}?key=abc123XYZ!`); // Keep key here, hidden from public view
         console.log(`Response status: ${response.status}`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
         console.log(`Data received:`, data);
         // Format JSON with syntax highlighting for display, stacked vertically, without exposing API key
         let formattedJson = '<pre><code class="json">';
-        formattedJson += `GET /json/${ip}\n`; // Remove ?key= from display
+        formattedJson += `GET /json/${ip}\n`; // Remove ?key=abc123XYZ! from display
         for (let key in data) {
           formattedJson += `<span class="key">"${key}"</span>: `;
           if (typeof data[key] === 'string') {
@@ -286,18 +284,23 @@
         document.getElementById('result').innerHTML = formattedJson;
         document.getElementById('result').style.display = 'block';
 
-        // Remove upgrade notice for homepage demo (handled by Pro tier key)
-        // Upgrade notice will still appear for free tier API calls
+        // Check if free tier data is limited and show upgrade notice
+        if (Object.keys(data).length <= 8) { // Assuming free tier shows ~8 fields
+          const upgradeNotice = document.createElement('p');
+          upgradeNotice.className = 'upgrade-notice';
+          upgradeNotice.textContent = 'Upgrade to Pro for full data access (all fields) and higher request limits.';
+          document.getElementById('result').appendChild(upgradeNotice);
+        }
 
         try {
           const map = new google.maps.Map(document.getElementById('map'), {
-            center: { lat: data.latitude, lng: data.longitude },
+            center: { lat: data.lat, lng: data.lon },
             zoom: 12
           });
           new google.maps.Marker({
-            position: { lat: data.latitude, lng: data.longitude },
+            position: { lat: data.lat, lng: data.lon },
             map: map,
-            title: data.cityName + ', ' + data.regionName
+            title: data.city + ', ' + data.regionName
           });
           document.getElementById('map').style.display = 'block';
           console.log('Map initialized successfully');
@@ -308,7 +311,7 @@
         }
       } catch (err) {
         console.error('Fetch error:', err);
-        document.getElementById('result').textContent = `Error fetching geolocation data: ${err.message}`;
+        document.getElementById('result').textContent = `Error fetching data: ${err.message}`;
         document.getElementById('result').style.display = 'block';
         document.getElementById('map').style.display = 'none';
       }
