@@ -16,6 +16,7 @@
     "express-rate-limit": "^7.5.0",
     "json2csv": "^6.0.0-alpha.2",
     "maxmind": "^4.3.24",
+    "node-cache": "^5.1.2",
     "xml-js": "^1.6.11"
   }
 }
