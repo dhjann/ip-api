@@ -148,11 +148,6 @@
     #result, #map {
       display: none;
     }
-    .upgrade-notice {
-      color: #dc3545;
-      font-size: 14px;
-      margin-top: 10px;
-    }
   </style>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaocglvHIK3KkLkcr60jm0wlWmDK7KbwI"></script>
 </head>
@@ -276,22 +271,13 @@
           } else if (typeof data[key] === 'number') {
             formattedJson += `<span class="number">${data[key]}</span>,`;
           } else if (typeof data[key] === 'boolean') {
-            formattedJson += `<span class="boolean">${data[key]}"</span>,`;
+            formattedJson += `<span class="boolean">${data[key]}</span>,`;
           }
           formattedJson += '\n';
         }
         formattedJson = formattedJson.slice(0, -2) + '</code></pre>'; // Remove last comma and newline, close tags
         document.getElementById('result').innerHTML = formattedJson;
         document.getElementById('result').style.display = 'block';
-
-        // Check if free tier data is limited and show upgrade notice
-        if (Object.keys(data).length <= 8) { // Assuming free tier shows ~8 fields
-          const upgradeNotice = document.createElement('p');
-          upgradeNotice.className = 'upgrade-notice';
-          upgradeNotice.textContent = 'Upgrade to Pro for full data access (all fields) and higher request limits.';
-          document.getElementById('result').appendChild(upgradeNotice);
-        }
-
         try {
           const map = new google.maps.Map(document.getElementById('map'), {
             center: { lat: data.lat, lng: data.lon },
